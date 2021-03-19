@@ -1,85 +1,32 @@
-// class HTML {
-//     static get(selector) {
-//         return document.querySelector(selector)
-//     }
-//     static draw(selector) {
-//         document.querySelector('.show') && document.querySelector('.show').classList.remove('show')
-//         this.get(selector).classList.add('show')
-//     }
-//     static onClick(selector, func) {     
-//         this.get(selector).addEventListener('click', func)
-//     }
-//     static onSubmit(selector, func) {     
-//         this.get(selector).addEventListener('submit', func)
-//     }
-// }
-
-// class Application {
-//     constructor() {
-//         this.user = {};
-//         this.usersData = []
-//         this.registration = this.registration.bind(this)
-//         this.auth = this.auth.bind(this)
-//     }
-//     registration(event) {
-//         event.preventDefault()
-//         this.user = {
-//             email: event.currentTarget[0].value,
-//             pass: event.currentTarget[1].value,
-//             repeat: event.currentTarget[2].value
-//         }
-//         if(this.user.pass !== this.user.repeat) {
-//             alert('Passwords are not equal')
-//         } else {
-//             event.currentTarget[0].value = event.currentTarget[1].value = event.currentTarget[2].value = ''
-//             this.usersData.push(this.user)
-//             alert('You are in the system now)')
-//             HTML.draw('.auth_page')
-//             console.log(this.usersData)
-//         }
-//     }
-//     auth(event) {
-//         event.preventDefault()
-//         //вызвана через eventListener, то this - это объект на который нажали
-//         this.user = {
-//             email: event.currentTarget[0].value,
-//             pass: event.currentTarget[1].value,
-//         }
-//         const currentUser = this.usersData.find(user => user.email === this.user.email)
-//         if(currentUser.pass === this.user.pass) {
-//             alert('you are logged in')
-//         } else {
-//             alert('incorrect password')
-//         }
-//     }
-//     init() {
-//         HTML.draw('.main_page')
-//         HTML.onClick('.registration_button', () => {
-//             HTML.draw('.registration_page')
-//         })
-//         HTML.onClick('.auth_button', () => {
-//             HTML.draw('.auth_page')
-//         })
-//         HTML.onClick('.go-to-main-page', () => {
-//             HTML.draw('.main_page')
-//         })
-//         HTML.onSubmit('.registration_page', this.registration)
-//         HTML.onSubmit('.auth_page', this.auth)
-//     }
-// }
-
-// const app = new Application('Petya')
-// const app2 = new Application('Vasya')
-
-// app.init()
+class Contacts {
+    constructor () {
+        this.users = [];
+    }
+    add (user) {
+       this.users.push(user);
+       console.log(this.users);
+    }
+    editUser (id, obj) {
+        this.users = this.users.map(item => {
+            if( item.id === id) {
+                return item = obj;
+            }
+            return item;
+        });
+    }
+    remove (id) {
+        this.users = this.users.filter(item => item.id !== id);
+        console.log(this.users);
+    }
+    getContacts () {
+        return this.users;
+    }
+}
 
 
-
-
-
-
-class User {
+class User extends Contacts {
     constructor (data) {
+        super();
         this.data = data;
     }
     edit (obj) {
@@ -95,6 +42,19 @@ class User {
         return this.data;
     }
 }
+
+class ContactsApp extends Contacts {
+    constructor () {
+        super();
+    }
+    init () {
+        let newDiv = document.createElement('div');
+        document.body.appendChild(newDiv);
+        newDiv.classList.add('contacts');
+    }
+}
+
+
 
 const data = {
     id: 1,
@@ -113,6 +73,45 @@ const newData = {
     adress: 'Petrovskogo, 50',
     phone: '6500921123'
 };
+
+const newDataTest = {
+    id: 5,
+    name: 'Missdfha',
+    email: '3521sdf2@mail.ru',
+    adress: 'Petrosfdvskogo, 50',
+    phone: '650044921123'
+};
+
+const newDataTest2 = {
+    id: 18,
+    name: 'Pitro',
+    email: '3521sdf2@mail.ru',
+    adress: 'Petrosfdvskogo, 50',
+    phone: '650044921123'
+};
+
+
+const newDataTest3 = {
+    id: 19,
+    name: 'Dasha',
+    email: '3521sdf2@mail.ru',
+    adress: 'Petrosfdvskogo, 50',
+    phone: '650044921123'
+};
+
+
 console.log(user.get());
 user.edit(newData);
-console.log(user.get());
+user.add(newData);
+user.editUser(5, newDataTest);
+
+user.add(newDataTest2);
+user.add(newDataTest3);
+user.remove(19);
+
+const contacts = user.getContacts();
+console.log(contacts, 'contacts');
+
+const newApp = new ContactsApp();
+
+newApp.init();
